@@ -38,6 +38,7 @@ app.get("/", (request, response) => {
   response.json(data);
 });
 
+
 // Pretend we have an error ...
 // e.g. tried to an API call and the API was not available
 // or database didn't find the username
@@ -45,42 +46,17 @@ app.get("/broken", (request, response) => {
   throw new Error("Something is totally broken");
 });
 
-app.get('/weather', (request, response => {
+// http://localhost:5176?type=weatherData
+
+app.get('/weather', (request, response) => {
   let type = request.query.type; 
-  if (weather[type]){
-    response.json(weather[type])
+  if (weatherData[type]) {
+    response.json(weatherData[type]);
   } else {
-    throw new Error("No Such Weather")
+    throw new Error("No Such Weather");
   }
 });
 
-
-// http://localhost:3000?type=food
-// http://localhost:3000?type=supplies
-// app.get("/shopping-list", (request, response) => {
-//   let type = request.query.type;
-
-//   if (theList[type]) {
-
-    // theList[type] is the full array
-    // How do I get part of it?
-    // theLlist[type].filter();
-    // thiList[type].find();
-
-  //   response.json(theList[type]);
-  // } else {
-  //   throw new Error("No Such List");
-  // }
-
-  // This was reading from 2 files
-  // if ( type === "food" ) {
-  //     response.json(foodList);
-  // } else if ( type === "supplies" ) {
-  //     response.json(suppliesList);
-  // } else {
-  //     throw new Error("No such list");
-  // }
-// });
 
 app.get("*", (request, response) => {
   response.status(404).send("Page Not Avaiable");
