@@ -101,6 +101,9 @@ app.get("/weather", (request, response) => {
 
     // console.log("cityData", cityData.data);
 
+
+
+    
     let cityWeather = cityData.data.map((day) => {
       // let cityForecast = day.weather;
       return new Forecast(day.valid_date, `Low of ${day.low_temp}, high of ${day.max_temp} with ${day.weather.description}`);
