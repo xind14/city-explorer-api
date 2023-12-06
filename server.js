@@ -27,7 +27,7 @@ app.use(cors());
 
 // Should be in the "enviornment"
 // we are getting the port variable from the .env file.
-const PORT = process.env.PORT || 5176;
+const PORT = process.env.PORT || 3002;
 
 // Route Handler
 // this is a route. if you turn the server on and go to http://localhost:3001/ (or whatever port you specified in your .env), you will see 'hello from the home route'
@@ -48,14 +48,60 @@ app.get("/broken", (request, response) => {
 
 // http://localhost:5176?type=weatherData
 
+// app.get('/weather', (request, response) => {
+//   let type = request.query.type; 
+//   if (weatherData[type]) {
+//     response.json(weatherData[type]);
+//   } else {
+//     throw new Error("No Such Weather");
+//   }
+// });
+
+//initial version
+// app.get('/weather', (request, response) => {
+//   let userLat = request.query.latitude;
+//   let userLon = request.query.longitude;
+ 
+//   if (userLat && userLon) {
+//     const cityData = weatherData.find(city => city.lat === userLat && city.lon === userLon);
+
+//     if (cityData) {
+//       response.json(cityData);
+//     } else {
+//       throw new Error("No Such Weather");
+//     }
+//   }
+// });
+
+
+//chatgpt version
 app.get('/weather', (request, response) => {
-  let type = request.query.type; 
-  if (weatherData[type]) {
-    response.json(weatherData[type]);
+  let userLat = request.query.latitude;
+  let userLon = request.query.longitude;
+
+  console.log('Request:', request);
+  console.log('userLat:', userLat);
+  console.log('userLon:', userLon);
+
+  if (userLat && userLon) {
+    const cityData = weatherData.find(city => city.lat === userLat && city.lon === userLon);
+
+    if (cityData) {
+      console.log('City data found:', cityData);
+      response.json(cityData.data[0]);
+        } else {
+      console.log('No city data found');
+      throw new Error("No Such Weather");
+    }
   } else {
-    throw new Error("No Such Weather");
+    console.log('Latitude or longitude missing');
+    throw new Error("Both latitude and longitude are required parameters");
   }
 });
+
+
+
+
 
 
 app.get("*", (request, response) => {
