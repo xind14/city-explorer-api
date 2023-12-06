@@ -38,7 +38,6 @@ app.get("/", (request, response) => {
   response.json(data);
 });
 
-
 // Pretend we have an error ...
 // e.g. tried to an API call and the API was not available
 // or database didn't find the username
@@ -49,7 +48,7 @@ app.get("/broken", (request, response) => {
 // http://localhost:5176?type=weatherData
 
 // app.get('/weather', (request, response) => {
-//   let type = request.query.type; 
+//   let type = request.query.type;
 //   if (weatherData[type]) {
 //     response.json(weatherData[type]);
 //   } else {
@@ -61,7 +60,7 @@ app.get("/broken", (request, response) => {
 // app.get('/weather', (request, response) => {
 //   let userLat = request.query.latitude;
 //   let userLon = request.query.longitude;
- 
+
 //   if (userLat && userLon) {
 //     const cityData = weatherData.find(city => city.lat === userLat && city.lon === userLon);
 
@@ -73,36 +72,39 @@ app.get("/broken", (request, response) => {
 //   }
 // });
 
-
 //chatgpt version
-app.get('/weather', (request, response) => {
+
+
+//http://localhost:3002/weather?latitude=47.6038321&longitude=-122.330062
+
+app.get("/weather", (request, response) => {
   let userLat = request.query.latitude;
   let userLon = request.query.longitude;
 
-  console.log('Request:', request);
-  console.log('userLat:', userLat);
-  console.log('userLon:', userLon);
+  console.log("Request:", request);
+  console.log("userLat:", userLat);
+  console.log("userLon:", userLon);
 
   if (userLat && userLon) {
-    const cityData = weatherData.find(city => city.lat === userLat && city.lon === userLon);
+    const cityData = weatherData.find(
+      (city) => city.lat === userLat && city.lon === userLon
+    );
+    console.log("cityData", cityData.data);
+    let cityWeather= cityData.data;
 
     if (cityData) {
-      console.log('City data found:', cityData);
+      let cityName = cityData.city_name
+      console.log("City data found:", cityData.city_name);
       response.json(cityData.data[0]);
-        } else {
-      console.log('No city data found');
+    } else {
+      console.log("No city data found");
       throw new Error("No Such Weather");
     }
   } else {
-    console.log('Latitude or longitude missing');
+    console.log("Latitude or longitude missing");
     throw new Error("Both latitude and longitude are required parameters");
   }
 });
-
-
-
-
-
 
 app.get("*", (request, response) => {
   response.status(404).send("Page Not Avaiable");
