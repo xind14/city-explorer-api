@@ -27,7 +27,7 @@ app.use(cors());
 
 // Should be in the "enviornment"
 // we are getting the port variable from the .env file.
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5176;
 
 // Route Handler
 // this is a route. if you turn the server on and go to http://localhost:3001/ (or whatever port you specified in your .env), you will see 'hello from the home route'
