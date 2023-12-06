@@ -55,7 +55,7 @@ Tuesday: David Sharma
 
 1. Number and name of feature: Feature #2: Weather (placeholder): As a user of City Explorer, I want to see weather info for the city I searched, so that I know how to pack for an upcoming trip.longitude of that location.
     - Estimate of time needed to complete: 3 hrs
-    - Start time: 3:00pm
+    - Start time: 2:39pm
     - Finish time: 5:20pm
     - Actual time needed to complete: 2 hr 20 min
 
