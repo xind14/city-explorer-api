@@ -27,7 +27,7 @@ app.use(cors());
 
 // Should be in the "enviornment"
 // we are getting the port variable from the .env file.
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3002;
 
 // Route Handler
 // this is a route. if you turn the server on and go to http://localhost:3001/ (or whatever port you specified in your .env), you will see 'hello from the home route'
@@ -74,6 +74,9 @@ app.get("/broken", (request, response) => {
 
 //chatgpt version
 
+
+//http://localhost:3002/weather?latitude=47.6038321&longitude=-122.330062
+
 class Forecast {
   constructor(date, description) {
     this.date = date;
@@ -81,40 +84,84 @@ class Forecast {
   }
 }
 
-
-//http://localhost:3002/weather?latitude=47.6038321&longitude=-122.330062
+// ... (other code)
 
 app.get("/weather", (request, response) => {
   let userLat = request.query.latitude;
   let userLon = request.query.longitude;
 
-  console.log("Request:", request);
-  console.log("userLat:", userLat);
-  console.log("userLon:", userLon);
+  // console.log("Request:", request);
+  // console.log("userLat:", userLat);
+  // console.log("userLon:", userLon);
 
   if (userLat && userLon) {
     const cityData = weatherData.find(
       (city) => city.lat === userLat && city.lon === userLon
     );
-    console.log("cityData", cityData.data);
-    // let cityWeather= cityData.data;
 
-    if (cityData) {
-      let cityName = cityData.city_name
-      console.log("City data found:", cityData.city_name);
-      // response.json(cityData.data[0]);
-      let cityWeather = cityData.data.map(
-        (day) => new Forecast(day.valid_date, day.weather.description)
-      );
-    } else {
-      console.log("No city data found");
-      throw new Error("No Such Weather");
-    }
+    // console.log("cityData", cityData.data);
+
+    let cityWeather = cityData.data.map((day) => {
+      // let cityForecast = day.weather;
+      return new Forecast(day.valid_date, `Low of ${day.low_temp}, high of ${day.max_temp} with ${day.weather.description}`);
+    });
+
+    // console.log("City data found:", cityData.city_name);
+    // response.json(cityData.data[0]);
+
+    // let cityForecast = cityWeather.map(
+    //   (day) => new Forecast(day.valid_date, day.weather.description)
+    // );
+
+
+    console.log("City weather:", cityWeather);
+    response.json(cityWeather);
   } else {
-    console.log("Latitude or longitude missing");
+    // console.log("Latitude or longitude missing");
     throw new Error("Both latitude and longitude are required parameters");
   }
 });
+
+
+
+// app.get("/weather", (request, response) => {
+//   let userLat = request.query.latitude;
+//   let userLon = request.query.longitude;
+//     let cityWeather= cityData.data;
+//     console.log("cityData", cityData.data);
+
+//   console.log("Request:", request);
+//   console.log("userLat:", userLat);
+//   console.log("userLon:", userLon);
+
+//   if (userLat && userLon) {
+//     const cityData = weatherData.find(
+//       (city) => city.lat === userLat && city.lon === userLon
+//     );
+
+//     if (cityData) {
+//             console.log("City data found:", cityData.city_name);
+
+//       let cityName = cityData.city_name
+//       response.json(cityData.data[0]);
+//        let cityWeather = cityData.data.map(
+//         (day) => new Forecast(day.valid_date, day.weather.description)
+//       );
+//       console.log("Mapped city weather:", cityWeather);
+//     } else {
+//       console.log("No city data found");
+//       throw new Error("No Such Weather");
+//     }
+//   } else {
+//     console.log("Latitude or longitude missing");
+//     throw new Error("Both latitude and longitude are required parameters");
+//   }
+// });
+
+
+
+
+
 
 app.get("*", (request, response) => {
   response.status(404).send("Page Not Avaiable");
