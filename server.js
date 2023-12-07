@@ -1,46 +1,21 @@
 "use strict";
 
-// Pull data from a file (this will eventually be an API call...)
-// let suppliesList = require("./data/supplies.json");
-// let foodList = require("./data/food.json");
-// let weatherData = require('./data/weather.json');
-
-// Use a library called "dotenv" to "read" my .env file
-// this library lets us access our .env file
-// And put all of the "key/value" pairs into an object called process.env
 require("dotenv").config();
-
-// Bring in the "express" library
 const express = require("express");
-
-// Bring in the "cors" library to let us have more open access to the server
-// library that determines who is allowed to speak to our server
 const cors = require("cors");
 const axios = require("axios");
-// Initialize my express application
-// initalizes the express library
 const app = express();
-
-// Activate "cors"
-// this settting says that everyone is allowed to speak to our server
-app.use(cors());
-
-// Should be in the "enviornment"
-// we are getting the port variable from the .env file.
 const PORT = process.env.PORT || 3000;
 
-// Route Handler
-// this is a route. if you turn the server on and go to http://localhost:3001/ (or whatever port you specified in your .env), you will see 'hello from the home route'
-// "/" is the "route"
-// (request, response) => {} is the handler callback
+
+
+app.use(cors());
+
 app.get("/", (request, response) => {
   let data = { message: "Goodbye World" };
   response.json(data);
 });
 
-// Pretend we have an error ...
-// e.g. tried to an API call and the API was not available
-// or database didn't find the username
 app.get("/broken", (request, response) => {
   throw new Error("Something is totally broken");
 });
@@ -55,7 +30,6 @@ class Forecast {
     this.description = description;
   }
 }
-
 
 app.get("/weather", getWeatherFromApi);
 
@@ -77,6 +51,7 @@ async function getWeatherFromApi(request, response) {
           key: process.env.WEATHER_API_KEY,
           lat: lat,
           lon: lon,
+          // day: 7,
         },
       }
     );
@@ -102,17 +77,10 @@ async function getWeatherFromApi(request, response) {
 
 
 
-// https://api.themoviedb.org/3/search/movie?language=en-US&page=1&query=Dallas 
 
 class Movie {
   constructor(
-    title,
-    overview,
-    averageVotes,
-    totalVotes,
-    image_url,
-    popularity,
-    releaseDate
+    title, overview, vote_average, vote_count, poster_path, popularity, release_date
   ) {
     this.title = title;
     this.overview = overview;
@@ -123,7 +91,6 @@ class Movie {
     this.releaseDate = release_date;
   }
 }
-// https://api.themoviedb.org/3/search/movie?query=dallas&page=1
 app.get("/movies", getMoviesFromApi);
 
 async function getMoviesFromApi(request, response) {
@@ -136,17 +103,18 @@ async function getMoviesFromApi(request, response) {
         .status(400)
         .json({ error: "Missing required parameters" });
     }
+
+    // https://api.themoviedb.org/3/search/movie?query=city&language=en-US&page=1
+
     let movieResponse = await axios.get(
       `https://api.themoviedb.org/3/search/movie`,
       {
-        params: {
-          key: process.env.MOVIE_API_KEY,
-
-          query: city,
-          page: 1,
-        },
-      }
-    );
+        params: {query: `${city}`},
+        headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${process.env.MOVIE_ACCESS_TOKEN}`
+        }
+    });
 
     let cityMovies = movieResponse.data.results.map((movie) => {
       return new Movie(
@@ -155,15 +123,15 @@ async function getMoviesFromApi(request, response) {
         movie.vote_average,
         movie.vote_count,
         movie.poster_path,
-        // `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
         movie.popularity,
         movie.release_date
       );
-    });console.log(movies);
-
-    response.json({
-      cityMovies,
     });
+    console.log(movie);
+
+    response.json(
+      cityMovies,
+    );
     console.log(cityMovies);
   } catch (error) {
     console.error("Error fetching movie data:", error.message);
@@ -171,26 +139,12 @@ async function getMoviesFromApi(request, response) {
   }
 }
 
-
-
-
-
-
-//
 app.get("*", (request, response) => {
   response.status(404).send("Page Not Avaiable");
 });
 
-// Error Handler - 4 parameters to the callback
-// Express automatically calls this when an error is "Thrown"
 app.use((error, request, response, next) => {
   response.status(500).send(error.message);
 });
 
-// Start up the web server
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
-// 200 success
-// 500 broken
-// 404 not found
-// 403 forbidden api wrong
