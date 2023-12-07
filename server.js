@@ -161,25 +161,46 @@ async function getMoviesFromApi(request, response) {
         .json({ error: "Missing required parameters" });
     }
 
-    let movieURL = "https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1";
-      // let movieResponse;  
+        // "https://api.themoviedb.org/3/search/movie?query=city&language=en-US&api_key=0816b844abf90d72bc1bd3e3b2baa9eb"
+
+    // "https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1";
+
+//     const fetch = require('node-fetch');
+
+// const url = 'https://api.themoviedb.org/3/search/movie?query=city&include_adult=false&language=en-US&page=1';
+// const options = {
+//   method: 'GET',
+//   headers: {
+//     accept: 'application/json',
+//     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwODE2Yjg0NGFiZjkwZDcyYmMxYmQzZTNiMmJhYTllYiIsInN1YiI6IjY1NmQwMDIzODgwNTUxMDEzYTQ4ODMxMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.FnFnQnb8keyChKboHpfy2tK1mMcLCxNHdyVhM2Nbzss'
+//   }
+// };
+//https://api.themoviedb.org/3/search/movie?${MOVIE_API_KEY}&include_adult=false&language=en-US&page=1
+
+// https://api.themoviedb.org/3/search/movie?query=seattle&api_key=0816b844abf90d72bc1bd3e3b2baa9eb&include_adult=false;
+
+
+    let movieURL = `https://api.themoviedb.org/3/search/movie`;
+
+    //chat gpt advice
+    let movieResponse;  // Declare movieResponse outside the if block
 
     if (city) {
-    let  movieResponse = await axios.get( movieURL, {
-        params: { query: `${city}` },
+      movieResponse = await axios.get(movieURL, {
+        params: { query: `${city}`,include_adult:'false' },
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${MOVIE_ACCESS_TOKEN}`,
         },
       });
-    
-
+    }
+console.log(movieResponse.data.results);
     if (movieResponse && movieResponse.data && movieResponse.data.results) {
       const cityMovies = movieResponse.data.results
         .slice(0, 20)
         .sort((a, b) => b.popularity - a.popularity);
       let sortedMovies = cityMovies.map(
-        (movie) =>{
+        (movie) =>
           new Movie(
             movie.title,
             movie.overview,
@@ -189,18 +210,17 @@ async function getMoviesFromApi(request, response) {
             movie.popularity,
             movie.release_date
           )
-      }  );
+      );
 
       console.log(sortedMovies);
 
       response.json(sortedMovies);
       console.log(cityMovies);
-    
+    }
   } catch (error) {
     console.error("Error fetching movie data:", error.message);
     response.status(500).json({ error: "Internal server error" });
   }
-}
 }
 
 
