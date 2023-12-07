@@ -98,6 +98,92 @@ async function getWeatherFromApi(request, response) {
 
 
 
+class Movies {
+  constructor(title, overview, averageVotes, totalVotes, image_url, popularity, releaseDate) {
+    this.title = title;
+    this.overview = overview;
+    this.averageVotes = vote_average;
+    this.totalVotes = vote_count;
+    this.image_url = poster_path;
+    this.popularity = popularity;
+    this.releaseDate = release_date;
+}
+}
+
+app.get('/movies', getMoviesFromApi);
+
+
+async function getMoviesFromApi(request, response) {
+  try {
+    let city = request.query.cityName
+
+    if (!city) {
+      return response.status(400).json({ error: 'Missing required parameters' });
+    }
+    let axiosResponse = await axios.get('https://api.themoviedb.org/3/search/movie', {
+      params: {
+         query: city,
+        key: process.env.MOVIE_API_KEY,
+       
+      },
+    });
+
+let cityMovies = axiosResponse.data.results.map((movie) => {
+  return new Movies(
+    movie.title,
+    movie.overview,
+    movie.vote_average,
+    movie.vote_count,
+    movie.poster_path,
+    // `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+    movie.popularity,
+    movie.release_date
+  );
+});
+
+response.json({
+ movies:cityMovies,
+});
+} catch (error) {
+console.error('Error fetching movie data:', error.message);
+response.status(500).json({ error: 'Internal server error' });
+}
+};
+
+//     let cityWeather = axiosResponse.data.data.map((day) => {
+//       return new Forecast(
+//         day.valid_date,
+//         `Low of ${day.low_temp}, high of ${day.max_temp} with ${day.weather.description}`
+//       );
+//     });
+//     console.log('City Weather:', cityWeather);
+//     response.json({
+//       city_name: axiosResponse.data.city_name, 
+//       latitude: axiosResponse.data.lat,
+//       longitude: axiosResponse.data.lon,
+//       forecast: cityWeather,
+//     });
+//   } catch (error) {
+//     console.error('Error fetching weather data:', error.message);
+//     response.status(500).json({ error: 'Internal server error' });
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
