@@ -1,100 +1,39 @@
-"use strict";
+'use strict';
 
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
-const app = express();
+//3rd party dependencies
+require('dotenv').config();
 const PORT = process.env.PORT || 3000;
-const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
-const MOVIE_ACCESS_TOKEN = process.env.MOVIE_ACCESS_TOKEN;
 
+//internal dependencies
+const express = require('express');
+const cors = require('cors');
+const handleWeather = require('./handlers/weather');
+const handleMovies = require('./handlers/movies');
+
+//app initializer
+const app = express();
+
+
+//middleware
 app.use(cors());
 
-app.get("/", (request, response) => {
-  let data = { message: "Goodbye World" };
-  response.json(data);
-});
+//route handlers
+app.get('/', handleHomePage);
 
-app.get("/broken", (request, response) => {
-  throw new Error("Something is totally broken");
-});
+app.get('/weather', handleWeather);
+app.get('/movies', handleMovies);
+app.get('*', handleNotFound);
+app.use(errorHandler);
 
-//chatgpt version
+// handler functions
 
-//http://localhost:3002/weather?latitude=47.6038321&longitude=-122.330062
-
-class Forecast {
-  constructor(date, description) {
-    this.date = date;
-    this.description = description;
-  }
+function handleHomePage(request, response) {
+  response.status(200).send('Welcome Home');
+}
+function handleNotFound(request, response) {
+  response.status(404).send('Page Not Available');
 }
 
-app.get("/weather", getWeatherFromApi);
-
-async function getWeatherFromApi(request, response) {
-  try {
-    let lat = request.query.latitude;
-    let lon = request.query.longitude;
-
-    if (!lat || !lon) {
-      return response
-        .status(400)
-        .json({ error: "Missing required parameters" });
-    }
-
-    let axiosResponse = await axios.get(
-      `https://api.weatherbit.io/v2.0/forecast/daily`,
-      {
-        params: {
-          key: process.env.WEATHER_API_KEY,
-          lat: lat,
-          lon: lon,
-          // day: 7,
-        },
-      }
-    );
-
-    let cityWeather = axiosResponse.data.data.map((day) => {
-      return new Forecast(
-        day.valid_date,
-        `Low of ${day.low_temp}, high of ${day.max_temp} with ${day.weather.description}`
-      );
-    });
-    console.log("City Weather:", cityWeather);
-    response.json({
-      city_name: axiosResponse.data.city_name,
-      latitude: axiosResponse.data.lat,
-      longitude: axiosResponse.data.lon,
-      forecast: cityWeather,
-    });
-  } catch (error) {
-    console.error("Error fetching weather data:", error.message);
-    response.status(500).json({ error: "Internal server error" });
-  }
-}
-
-class Movie {
-  constructor(
-    title,
-    overview,
-    vote_average,
-    vote_count,
-    poster_path,
-    popularity,
-    release_date
-  ) {
-    this.title = title;
-    this.overview = overview;
-    this.averageVotes = vote_average;
-    this.totalVotes = vote_count;
-    this.poster_path = poster_path;
-    this.popularity = popularity;
-    this.releaseDate = release_date;
-    this.baseURL = `https://image.tmdb.org/t/p/w185${poster_path}`;
-  }
-}
 app.get("/movies", getMoviesFromApi);
 
 async function getMoviesFromApi(request, response) {
@@ -158,5 +97,10 @@ app.get("*", (request, response) => {
 app.use((error, request, response, next) => {
   response.status(500).send(error.message);
 });
+
+
+function errorHandler(error, request, response, next) {
+  response.status(500).send('An error occurred');
+}
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
