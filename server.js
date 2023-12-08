@@ -97,7 +97,6 @@ class Movie {
 }
 app.get("/movies", getMoviesFromApi);
 
-
 async function getMoviesFromApi(request, response) {
   try {
     let city = request.query.city;
@@ -109,23 +108,21 @@ async function getMoviesFromApi(request, response) {
         .json({ error: "Missing required parameters" });
     }
 
-
-
     let movieURL = `https://api.themoviedb.org/3/search/movie`;
 
     //chat gpt advice
-    let movieResponse;  // Declare movieResponse outside the if block
+    let movieResponse; // Declare movieResponse outside the if block
 
     if (city) {
       movieResponse = await axios.get(movieURL, {
-        params: { query: `${city}`,include_adult:'false' },
+        params: { query: `${city}`, include_adult: "false" },
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${MOVIE_ACCESS_TOKEN}`,
         },
       });
     }
-console.log(movieResponse.data.results);
+    console.log(movieResponse.data.results);
     if (movieResponse && movieResponse.data && movieResponse.data.results) {
       const cityMovies = movieResponse.data.results
         .slice(0, 20)
@@ -153,7 +150,6 @@ console.log(movieResponse.data.results);
     response.status(500).json({ error: "Internal server error" });
   }
 }
-
 
 app.get("*", (request, response) => {
   response.status(404).send("Page Not Avaiable");
