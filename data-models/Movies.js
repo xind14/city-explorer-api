@@ -1,7 +1,7 @@
 "use strict";
 
 //supporting class
-class Movie {
+class Movies {
   constructor(
     title,
     overview,
@@ -21,4 +21,4 @@ class Movie {
     this.baseURL = `https://image.tmdb.org/t/p/w185${poster_path}`;
   }
 }
-module.exports = Movie;
+module.exports = Movies;

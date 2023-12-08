@@ -45,7 +45,7 @@ console.log(movieResponse.data.results);
         .sort((a, b) => b.popularity - a.popularity);
       let sortedMovies = cityMovies.map(
         (movie) =>
-          new Movie(
+          new Movies(
             movie.title,
             movie.overview,
             movie.vote_average,
