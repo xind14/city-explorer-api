@@ -4,7 +4,7 @@
 ## Lab 07 - Custom Servers with Node and Express
 
 **Author**: Xin Deng
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 1.0.1 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
@@ -45,8 +45,10 @@ ChatGPT/Tammy, John, Brandon
 Tuesday: Brendan/Steph
 ![Whiteboard Img](assets/whiteboard2.png)
 
+Wednesday: Self
+![Whiteboard Img](assets/whiteboard3.png)
 
-## Time Estimates
+## Time Estimates 
 
 1. Number and name of feature: Feature #1: Set up server repo
     - Estimate of time needed to complete: 2 hrs
@@ -70,7 +72,7 @@ Tuesday: Brendan/Steph
 
 ## Lighthouse Accessibility Report Score
 
-![Lighthouse report for Lab 6](assets/lighthouse2.png)
+![Lighthouse report for Lab 7](assets/lighthouse2.png)
 
 ### Reflections and Comments
 
@@ -83,3 +85,58 @@ Tuesday: Brendan/Steph
 
 1. How long you spent working on this assignment.
   - Almost 10 hrs and still not done.
+
+
+
+
+
+
+## Time Estimates Lab 8
+
+1. Number and name of feature: Feature #1: Weather (live): As a user of City Explorer, I want to see weather info for the city I searched, so that I know how to pack for an upcoming trip.
+    - Estimate of time needed to complete: 3 hrs
+    - Start time: 2:30pm
+    - Finish time: 7:00pm
+    - Actual time needed to complete: 5 hr 30 min
+
+1. Number and name of feature: Feature #2: Movies: As a user of City Explorer, I want to see info about movies related to the city I searched, so that I can learn more about the destination. how to pack for an upcoming trip.longitude of that location.
+    - Estimate of time needed to complete: 3 hrs
+    - Start time: 7:00pm
+    - Finish time: NA
+    - Actual time needed to complete: 9 hrs and still not done
+
+1. Number and name of feature: Feature #3:Publish: Deploy your server. As a user, I want to access the City Explorer application on the web, so that anyone can explore from anywhere.
+    - Estimate of time needed to complete: 3 hrs
+    - Start time: NA
+    - Finish time: NA
+    - Actual time needed to complete: NA
+
+
+
+
+
+## Lighthouse Accessibility Report Score
+
+![Lighthouse report for Lab 8](assets/lighthouse2.png)
+
+### Reflections and Comments
+
+1. A link to the deployed version of your latest code.
+1. A link to your public Trello board.
+1. A question within the context of this lab assignment.
+    - I don't understand how to get localhost working to debug. I'm collecting server errors like pokemon cards like what "hundreds" number am I going to get next...
+1. An observation about the lab assignment, or related ‘Ah-hah!’ moment.
+    - I had an ah-hah moment when Brandon showed me how to get local host to work but then I forgot... I thought it was a plug and chug lab since we already written the weather function yesterday, but wow it's so complicated. 
+1. How long you spent working on this assignment.
+    - 9 hours and I'm still not done. I stayed up till 6:30am to finish lab07 and I have a feeling I will tonight as well. 
+
+
+
+
+
+
+
+
+
+
+
