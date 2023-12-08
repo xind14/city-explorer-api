@@ -36,7 +36,8 @@ async function handleWeather(request, response) {
     let cityWeather = weatherResponse.data.data.map((day) => {
       return new Weather(
         day.valid_date,
-        `Low of ${day.low_temp}, high of ${day.max_temp} with ${day.weather.description}`
+        `Low of ${day.low_temp}, high of ${day.max_temp} with ${day.weather.description}`,
+        day.city_name
       );
     });
     console.log("City Weather:", cityWeather);

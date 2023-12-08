@@ -72,7 +72,7 @@ Wednesday: Self
 
 ## Lighthouse Accessibility Report Score
 
-![Lighthouse report for Lab 6](assets/lighthouse2.png)
+![Lighthouse report for Lab 7](assets/lighthouse2.png)
 
 ### Reflections and Comments
 
