@@ -26,7 +26,9 @@ async function handleMovies(request, response) {
 
     const movieKey = 'movies-' + city;
 
-    if (movieCache[movieKey] && (Date.now() - movieCache[movieKey].timestamp < 50000)) {
+    //set to a month bc 700 movies gets released/yr so that's 60 new movie releases, enough time to update popularity 
+    const monthlyCache = 2592000000;
+    if (movieCache[movieKey] && (Date.now() - movieCache[movieKey].timestamp < monthlyCache)) {
       console.log('Cache hit');
       return response.json(movieCache[movieKey].data);
     } else {
